@@ -6,12 +6,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/google/go-querystring/query"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 )
 
-const apiURL = "https://app.circle.so/api/v1"
+const apiURL = "https://app.circle.so/api/v1/"
 
 // ErrAccessTokenNotSet is returned when Client methods are called that require
 // an access token to be set.
@@ -37,15 +38,8 @@ func NewClient(apiToken string) *Client {
 	}
 }
 
-// WithBaseURL returns an Option to set the base URL to be used.
-func WithBaseURL(baseURL string) Option {
-	return func(c *Client) {
-		c.baseURL = baseURL
-	}
-}
-
 func (c *Client) newRequest(
-	ctx context.Context, method, endpoint string, body interface{},
+	ctx context.Context, method, endpoint string, body interface{}, queryOps interface{},
 ) (*http.Request, error) {
 	req, err := http.NewRequestWithContext(ctx, method, c.baseURL+endpoint, nil)
 	req.Header.Add("Authorization", "Token "+c.apiToken)
@@ -60,6 +54,15 @@ func (c *Client) newRequest(
 		}
 		req.Body = ioutil.NopCloser(bytes.NewBuffer(data))
 	}
+
+	if queryOps != nil {
+		vs, err := query.Values(queryOps)
+		if err != nil {
+			return nil, err
+		}
+		appendQueryValues(req, vs)
+	}
+
 	return req, nil
 }
 
