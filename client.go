@@ -19,9 +19,7 @@ var ErrAccessTokenNotSet = errors.New("access token not set on client")
 
 // Client for working with the Circle API.
 type Client struct {
-	clientID, clientSecret string
-	accessToken            string
-
+	apiToken     string
 	baseURL      string
 	c            *http.Client
 	errorHandler func(e error) error
@@ -31,18 +29,12 @@ type Client struct {
 type Option func(*Client)
 
 // NewClient returns a new client for working with the Circle API.
-func NewClient(clientID, clientSecret string, opts ...Option) *Client {
-	client := &Client{
-		clientID:     clientID,
-		clientSecret: clientSecret,
-		baseURL:      apiURL,
-		c:            http.DefaultClient,
+func NewClient(apiToken string) *Client {
+	return &Client{
+		apiToken: apiToken,
+		baseURL:  apiURL,
+		c:        http.DefaultClient,
 	}
-
-	for _, opt := range opts {
-		opt(client)
-	}
-	return client
 }
 
 // WithBaseURL returns an Option to set the base URL to be used.
@@ -52,25 +44,11 @@ func WithBaseURL(baseURL string) Option {
 	}
 }
 
-// WithAccessToken returns an option to set the access token to be used.
-// This token is used for user mailbox specific methods.
-func WithAccessToken(token string) Option {
-	return func(c *Client) {
-		c.accessToken = token
-	}
-}
-
-// As returns a copy of the Client with the given access token set.
-func (c *Client) As(accessToken string) *Client {
-	as := *c
-	WithAccessToken(accessToken)(&as)
-	return &as
-}
-
 func (c *Client) newRequest(
 	ctx context.Context, method, endpoint string, body interface{},
 ) (*http.Request, error) {
 	req, err := http.NewRequestWithContext(ctx, method, c.baseURL+endpoint, nil)
+	req.Header.Add("Authorization", "Token "+c.apiToken)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +59,8 @@ func (c *Client) newRequest(
 			return nil, fmt.Errorf("marshal body: %w", err)
 		}
 		req.Body = ioutil.NopCloser(bytes.NewBuffer(data))
-		req.Header.Add("Content-Type", "application/json; charset=utf")
+
+		//req.Header.Add("Content-Type", "application/json; charset=utf")
 	}
 	return req, nil
 }
