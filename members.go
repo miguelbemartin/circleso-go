@@ -9,7 +9,7 @@ const pathMembers = "community_members"
 
 // Member represents a member in the Circle.so system.
 type Member struct {
-	ID        string `json:"id"`
+	ID        int    `json:"id"`
 	Email     string `json:"email"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
