@@ -18,7 +18,7 @@ func TestNewError(t *testing.T) {
 		in  *http.Response
 		out error
 	}{
-		"nylas error": {
+		"circle error": {
 			in: &http.Response{
 				StatusCode: 400,
 				Body: body(`{

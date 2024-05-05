@@ -7,7 +7,7 @@ import (
 
 const pathMembers = "community_members"
 
-// Member represents a label in the Nylas system.
+// Member represents a member in the Circle.so system.
 type Member struct {
 	ID        string `json:"id"`
 	Email     string `json:"email"`

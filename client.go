@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/google/go-querystring/query"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/google/go-querystring/query"
 )
 
 const apiURL = "https://app.circle.so/api/v1/"
@@ -52,7 +53,7 @@ func (c *Client) newRequest(
 		if err != nil {
 			return nil, fmt.Errorf("marshal body: %w", err)
 		}
-		req.Body = ioutil.NopCloser(bytes.NewBuffer(data))
+		req.Body = io.NopCloser(bytes.NewBuffer(data))
 	}
 
 	if queryOps != nil {
