@@ -22,18 +22,17 @@ import (
 )
 
 func main() {
-	fmt.Println("hello world")
 
 	c := circle.NewClient("your-api-token")
 
 	members, err := c.GetMembers(context.Background(), nil)
 	if err != nil {
-		fmt.Println(err)
+		// do something with the error
 	}
 
-	// iterate and print members
+	// iterate the members
 	for _, member := range members {
-		fmt.Println(member)
+		// do something
 	}
 
 }
