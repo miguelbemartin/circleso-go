@@ -42,3 +42,11 @@ func main() {
 
 }
 ```
+
+## Authors
+
+* **Miguel Ángel Martín** - [@miguelbemartin](https://twitter.com/miguelbemartin)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
