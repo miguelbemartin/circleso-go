@@ -45,7 +45,7 @@ func main() {
 
 ## Authors
 
-* **Miguel Ángel Martín** - [@miguelbemartin](https://twitter.com/miguelbemartin)
+* **Miguel Ángel Martín** - [@miguelbemartin](https://x.com/miguelbemartin)
 
 ## License
 
